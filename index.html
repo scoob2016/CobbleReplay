@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Showdown Replay Viewer</title>
+<script src="template.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+<script src="main.js"></script>
+<style>
+body {font-family: sans-serif; padding: 1em;}
+button {margin-top: 0.5em;}
+</style>
+</head>
+<body>
+<h1>Showdown Replay Viewer</h1>
+<p>You can upload a replay log or pass it via URL using <code>?log=...</code>.</p>
+<input type="file" id="upload-file" style="display:none;">
+<button id="upload-button">Upload Log</button>
+<div class="iframe-result-container" style="margin-top:1em;"></div>
+</body>
+</html>
