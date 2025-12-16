@@ -9,7 +9,7 @@ function escapeHTML(html) {
 }
 
 function generateHTML(log) {
-    return templateHTML.replace("${BATTLE_LOG}", log);
+    return window.TemplateHTML.replace("${BATTLE_LOG}", log);
 }
 
 function setReplay(log) {
