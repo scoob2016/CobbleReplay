@@ -1,13 +1,6 @@
 "use strict";
 
 function generateHTML(log) {
-    html = html.replace(
-        '<button value="light" class="sel">Light</button>',
-        '<button value="light">Light</button>'
-    ).replace(
-        '<button value="dark">Dark</button>',
-        '<button value="dark" class="sel">Dark</button>'
-    );
     return window.TemplateHTML.replace("__BATTLE_LOG__", log);
 }
 
