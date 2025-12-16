@@ -19,34 +19,12 @@ function setReplay(log) {
     container.innerHTML = '<iframe src="' + url + '" style="width:100%;height:600px;" referrerpolicy="no-referrer" allowfullscreen></iframe>';
 }
 
-function uploadLog(logFile) {
-    if (!logFile) return;
-    const reader = new FileReader();
-    reader.readAsText(logFile, "UTF-8");
-    reader.onload = (evt) => setReplay(evt.target.result);
-    reader.onerror = (err) => console.error(err);
-}
-
 function getQueryParam(name) {
     const params = new URLSearchParams(window.location.search);
     return params.get(name);
 }
 
 function initialize() {
-    const btn = document.querySelector("#upload-button");
-    const fileInput = document.querySelector("#upload-file");
-
-    btn.addEventListener("click", () => fileInput.click());
-    fileInput.addEventListener("change", (e) => {
-        if (e.target.files.length) uploadLog(e.target.files[0]);
-    });
-
-    document.addEventListener("drop", (e) => {
-        e.preventDefault(); e.stopPropagation();
-        if (e.dataTransfer.files.length) uploadLog(e.dataTransfer.files[0]);
-    });
-    document.addEventListener("dragover", (e) => { e.preventDefault(); e.stopPropagation(); });
-
     const logFromURL = getQueryParam("log");
     if (logFromURL) {
         try {
