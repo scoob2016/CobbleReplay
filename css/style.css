@@ -50,8 +50,8 @@ p {
     background-color: var(--box-bg);
     border-radius: 0;
     box-shadow: none;
-    width: 100%;
-    max-width: 100%;
+    width: 90%;
+    max-width: 60%;
     box-sizing: border-box;
 }
 
