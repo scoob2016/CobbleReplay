@@ -56,7 +56,7 @@ body{padding:12px 0;}
 <div class="battle-log"></div>
 <div class="replay-controls"></div>
 <div class="replay-controls-2"></div>
-<script type="text/plain" class="battle-log-data">${BATTLE_LOG}</script>
+<script type="text/plain" class="battle-log-data">__BATTLE_LOG__</script>
 </div>
 </body>
 </html>
