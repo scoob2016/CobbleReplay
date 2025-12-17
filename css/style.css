@@ -5,13 +5,6 @@
     --box-bg: #1e1e1e;
 }
 
-body.light {
-    --bg-color: #f0f0f0;
-    --text-color: #121212;
-    --accent-color: #1976d2;
-    --box-bg: #ffffff;
-}
-
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
@@ -53,7 +46,7 @@ p {
     width: 90%;
     max-width: 80%;
     box-sizing: border-box;
-    height: auto;
+    height: 200px;
 }
 
 .iframe-result-container iframe {
