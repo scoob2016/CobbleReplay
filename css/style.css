@@ -39,7 +39,7 @@ p {
 }
 
 .iframe-result-container {
-    margin-top: 1em;
+    margin-top: 0.5em;
     padding: 1em;
     background-color: var(--box-bg);
     border-radius: 0;
