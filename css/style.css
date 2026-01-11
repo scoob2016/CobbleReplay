@@ -3,6 +3,7 @@
     --text-color: #ffffff;
     --accent-color: #1e88e5;
     --box-bg: #1e1e1e;
+    --footer-bg: #1e1e1e;
 }
 
 body {
@@ -62,7 +63,7 @@ p {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: var(--box-bg);
+    background-color: var(--footer-bg);
     color: var(--text-color);
     text-align: center;
     padding: 0.5em 0;

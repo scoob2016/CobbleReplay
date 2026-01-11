@@ -21,6 +21,10 @@ function setTheme(theme) {
         root.style.setProperty('--box-bg', theme.eb);
     }
 
+    if (theme.fb) {
+        root.style.setProperty('--footer-bg', theme.fb);
+    }
+
     if (theme.t) {
         document.title = theme.t;
         const heading = document.querySelector('h1');
