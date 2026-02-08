@@ -1,7 +1,11 @@
 "use strict";
 
-function generateHTML(log) {
-    return window.TemplateHTML.replace("__BATTLE_LOG__", log);
+function generateHTML(log, fakemonSprites) {
+    return window.TemplateHTML.replace("__BATTLE_LOG__", log)
+    .replace(
+        "__FAKEMON_JSON__",
+        JSON.stringify(fakemonSprites || {})
+    );
 }
 
 function setTheme(theme) {
@@ -37,8 +41,8 @@ function setTheme(theme) {
     }
 }
 
-function setReplay(log) {
-    const html = generateHTML(log);
+function setReplay(log, fakemonSprites) {
+    const html = generateHTML(log, fakemonSprites);
     const url = "data:text/html;charset=utf-8," + encodeURIComponent(html);
     const container = document.querySelector(".iframe-result-container");
     container.innerHTML = '<iframe src="' + url + '" style="width:100%;height:600px;" referrerpolicy="no-referrer" allowfullscreen></iframe>';
@@ -64,7 +68,7 @@ function initialize() {
         const json = pako.inflate(bytes, { to: 'string' });
         const data = JSON.parse(json);
         setTheme(data.t)
-        setReplay(data.r)
+        setReplay(data.r, data.f)
     } catch (e) {
         console.error("Failed to load log from URL.", e);
         alert("Invalid log URL. Please contact support!");

@@ -47,8 +47,37 @@ body{padding:12px 0;}
 .message-overflow::before {font-size:9pt;content:'...';}
 .subtle {color:#3A4A66;}
 </style>
+<script>
+window.FAKEMON_SPRITES = __FAKEMON_JSON__;
+</script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>
+<script>
+(function () {
+  if (!window.Dex || !Dex.getSpriteData) return;
+
+  const originalGetSpriteData = Dex.getSpriteData;
+
+  Dex.getSpriteData = function (species, side, options) {
+    const id = Dex.toID(species);
+
+    if (window.FAKEMON_SPRITES[id]) {
+      const sprite = window.FAKEMON_SPRITES[id];
+      const isBack = side === 'back';
+
+      return {
+        url: isBack ? sprite.back : sprite.front,
+        w: 96,
+        h: 96,
+        y: 0,
+        isCustom: true
+      };
+    }
+
+    return originalGetSpriteData.call(this, species, side, options);
+  };
+})();
+</script>
 </head>
 <body>
 <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
