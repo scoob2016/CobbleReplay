@@ -49,7 +49,7 @@ function setReplay(log, fakemonSprites) {
 }
 
 function initialize() {
-    window.lang = "es";
+    window.SHOWDOWN_LOCALE = "es";
     const raw = window.location.hash.slice(1);
     if (!raw.startsWith("cr1:")) return;
 
