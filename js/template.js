@@ -51,7 +51,42 @@ body{padding:12px 0;}
 <script>
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 </script>
-<script src="js/replayembed.js"></script>
+<script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>
+<script>
+(function() {
+    const patchInterval = setInterval(() => {
+        if (window.Dex && Dex.getSpriteData && !Dex.getSpriteData.__patched) {
+            const orig = Dex.getSpriteData;
+            Dex.getSpriteData = function(species, side, options) {
+                const id = (species || '').toLowerCase();
+                if (window.FAKEMON_SPRITES?.[id]) {
+                    const s = window.FAKEMON_SPRITES[id];
+                    return {url: side==='back'?s.back:s.front, w:96, h:96, y:0};
+                }
+                return orig.call(this, species, side, options);
+            };
+            Dex.getSpriteData.__patched = true;
+        }
+
+        if (window.Battle && Battle.prototype.getSpriteUrl && !Battle.prototype.getSpriteUrl.__patched) {
+            const orig = Battle.prototype.getSpriteUrl;
+            Battle.prototype.getSpriteUrl = function(pokemon, isBack) {
+                const id = (pokemon.species || '').toLowerCase();
+                if (window.FAKEMON_SPRITES?.[id]) {
+                    const s = window.FAKEMON_SPRITES[id];
+                    return isBack ? s.back : s.front;
+                }
+                return orig.call(this, pokemon, isBack);
+            };
+            Battle.prototype.getSpriteUrl.__patched = true;
+        }
+
+        if (Dex.getSpriteData.__patched && Battle.prototype.getSpriteUrl.__patched) {
+            clearInterval(patchInterval);
+        }
+    }, 10);
+})();
+</script>
 </head>
 <body>
 <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
