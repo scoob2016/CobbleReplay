@@ -51,37 +51,25 @@ body{padding:12px 0;}
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>
 <script>
 (function () {
-  function tryPatch() {
-    if (!window.Dex || !Dex.getSpriteData) return false;
-
-    const originalGetSpriteData = Dex.getSpriteData;
-
-    Dex.getSpriteData = function (species, side, options) {
-      const id = toID(species);
-
-      if (window.FAKEMON_SPRITES && window.FAKEMON_SPRITES[id]) {
-        const sprite = window.FAKEMON_SPRITES[id];
-        return {
-          url: side === 'back' ? sprite.back : sprite.front,
-          w: 96,
-          h: 96,
-          y: 0
-        };
-      }
-
-      return originalGetSpriteData.call(this, species, side, options);
-    };
-
-    return true;
-  }
-  const interval = setInterval(() => {
-    if (tryPatch()) clearInterval(interval);
-  }, 10);
+  const original = Dex.getSpriteData;
+  Dex.getSpriteData = function(species, side, options) {
+    const id = toID(species);
+    if (window.FAKEMON_SPRITES[id]) {
+      const sprite = window.FAKEMON_SPRITES[id];
+      return {
+        url: side === 'back' ? sprite.back : sprite.front,
+        w: 96,
+        h: 96,
+        y: 0
+      };
+    }
+    return original.call(this, species, side, options);
+  };
 })();
 </script>
+<script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>
 </head>
 <body>
 <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
