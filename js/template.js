@@ -52,21 +52,6 @@ body{padding:12px 0;}
 <script>
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 
-function adjustSpriteLeft(img) {
-    if (!img._originalLeft) {
-        img._originalLeft = parseFloat(img.style.left) || 0;
-        img._originalWidth = img.getBoundingClientRect().width;
-    }
-
-    const oldLeft = img._originalLeft;
-    const oldWidth = img._originalWidth;
-
-    const newWidth = img.getBoundingClientRect().width;
-    const newLeft = oldLeft + (oldWidth / 2) - (newWidth / 2);
-
-    img.style.setProperty('left', newLeft + 'px', 'important');
-}
-
 function replaceBattleSprites() {
     document.querySelectorAll('.battle img').forEach(img => {
         const src = img.src.toLowerCase();
@@ -83,7 +68,6 @@ function replaceBattleSprites() {
                     img.src = newSrc;
                     img.classList.remove('pixelated');
                     img.style.setProperty('width', 'auto', 'important');
-                    adjustSpriteLeft(img);
                     if (!img._sizeObserver) {
                         img._sizeObserver = new MutationObserver(() => {
                             img.style.setProperty('width', 'auto', 'important');
