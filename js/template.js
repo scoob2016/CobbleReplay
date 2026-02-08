@@ -79,8 +79,6 @@ if (battleDiv) {
 
 setTimeout(replaceBattleSprites, 50);
 </script>
-})();
-</script>
 </head>
 <body>
 <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
