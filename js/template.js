@@ -66,8 +66,8 @@ function replaceBattleSprites() {
 
                 if (img.src !== newSrc) {
                     img.src = newSrc;
+                    img.style.setProperty('width', 'auto', 'important');
                 }
-                img.style.width = 'auto';
                 break;
             }
         }
