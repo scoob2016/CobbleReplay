@@ -52,20 +52,15 @@ window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-(function () {
-  const original = Dex.getSpriteData;
-  Dex.getSpriteData = function(species, side, options) {
-    const id = toID(species);
-    if (window.FAKEMON_SPRITES[id]) {
-      const sprite = window.FAKEMON_SPRITES[id];
-      return {
-        url: side === 'back' ? sprite.back : sprite.front,
-        w: 96,
-        h: 96,
-        y: 0
-      };
+(function() {
+  const original = Battle.prototype.getSpriteUrl;
+  Battle.prototype.getSpriteUrl = function(pokemon, isBack) {
+    const id = toID(pokemon.species);
+    if (window.FAKEMON_SPRITES && window.FAKEMON_SPRITES[id]) {
+      const s = window.FAKEMON_SPRITES[id];
+      return isBack ? s.back : s.front;
     }
-    return original.call(this, species, side, options);
+    return original.call(this, pokemon, isBack);
   };
 })();
 </script>
