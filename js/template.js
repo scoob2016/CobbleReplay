@@ -79,6 +79,21 @@ function replaceBattleSprites() {
             }
         }
     });
+
+    document.querySelectorAll('.battle .innerbattle .leftbar .teamicons .picon, .battle .innerbattle .rightbar .teamicons .picon')
+        .forEach(picon => {
+            const aria = picon.getAttribute('aria-label') || '';
+            const match = aria.match(/\(([^)]+)\)/);
+            if (!match) return;
+            const speciesId = match[1].toLowerCase();
+
+            if (window.FAKEMON_SPRITES[speciesId]) {
+                const front = window.FAKEMON_SPRITES[speciesId].front;
+
+                picon.style.background = 'transparent url(${front}) no-repeat center center';
+                picon.style.backgroundSize = 'contain';
+            }
+        });
 }
 
 function waitForBattleContainer() {
