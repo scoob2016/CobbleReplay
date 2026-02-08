@@ -66,6 +66,10 @@ function replaceBattleSprites() {
 
                 if (img.src !== newSrc) {
                     img.src = newSrc;
+                    img.style.width = 'auto';
+                    const computedWidth = img.naturalWidth * (96 / img.naturalHeight);
+                    const left = parseFloat(img.style.left || 0);
+                    img.style.left = (left + (96 - computedWidth)/2) + 'px';
                 }
                 break;
             }
