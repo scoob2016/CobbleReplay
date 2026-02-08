@@ -57,7 +57,7 @@ function replaceBattleSprites() {
         const src = img.src;
         if (!src) return;
 
-        const match = src.match(/\\/sprites\\/ani(-back)?\\/([a-z0-9-]+)\\.gif$/);
+        const match = src.match(/\/sprites\/ani(-back)?\/([a-z0-9-]+)\.gif$/);
         if (!match) return;
 
         const isBack = !!match[1];
@@ -71,13 +71,22 @@ function replaceBattleSprites() {
     });
 }
 
-const battleDiv = document.querySelector('.battle');
-if (battleDiv) {
-    const observer = new MutationObserver(replaceBattleSprites);
-    observer.observe(battleDiv, { childList: true, subtree: true });
+function waitForBattleImages() {
+    const battleDiv = document.querySelector('.battle');
+    if (!battleDiv) return;
+
+    const imgs = battleDiv.querySelectorAll('img');
+    if (imgs.length > 0) {
+        replaceBattleSprites();
+
+        const observer = new MutationObserver(replaceBattleSprites);
+        observer.observe(battleDiv, { childList: true, subtree: true });
+    } else {
+        setTimeout(waitForBattleImages, 100);
+    }
 }
 
-setTimeout(replaceBattleSprites, 50);
+waitForBattleImages();
 </script>
 </head>
 <body>
