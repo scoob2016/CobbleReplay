@@ -52,27 +52,22 @@ body{padding:12px 0;}
 <script>
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 
-const patchedImages = new WeakSet();
-
 function replaceBattleSprites() {
     document.querySelectorAll('.battle img').forEach(img => {
-        const src = img.src;
+        const src = img.src.toLowerCase();
         if (!src) return;
 
-        const match = src.match(\/([a-z0-9-]+)(?:-back)?\\.[a-z0-9]+$\/i);
-        if (!match) return;
+        for (const speciesId in window.FAKEMON_SPRITES) {
+            if (src.includes(speciesId)) {
+                const isBack = src.includes('-back');
+                const newSrc = isBack
+                    ? window.FAKEMON_SPRITES[speciesId].back
+                    : window.FAKEMON_SPRITES[speciesId].front;
 
-        const isBack = !!match[1];
-        const speciesId = match[2];
-
-        if (window.FAKEMON_SPRITES?.[speciesId]) {
-            const newSrc = isBack
-                ? window.FAKEMON_SPRITES[speciesId].back
-                : window.FAKEMON_SPRITES[speciesId].front;
-
-            if (img.src !== newSrc) {
-                img.src = newSrc;
-                patchedImages.add(img);
+                if (img.src !== newSrc) {
+                    img.src = newSrc;
+                }
+                break;
             }
         }
     });
