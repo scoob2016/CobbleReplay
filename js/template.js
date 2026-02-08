@@ -84,6 +84,7 @@ function replaceBattleSprites() {
         .forEach(picon => {
             const aria = picon.getAttribute('aria-label') || '';
             const match = aria.match(/\(([^)]+)\)/);
+            console.log("aria = " + aria);
             if (!match) return;
             const speciesId = match[1].toLowerCase();
 
