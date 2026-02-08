@@ -59,7 +59,7 @@ function replaceBattleSprites() {
         const src = img.src;
         if (!src) return;
 
-        const match = src.match(/\\/sprites\\/ani(-back)?\\/([a-z0-9-]+)\\.[a-z0-9]+$/i);
+        const match = src.match(\/([a-z0-9-]+)(?:-back)?\\.[a-z0-9]+$\/i);
         if (!match) return;
 
         const isBack = !!match[1];
