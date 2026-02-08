@@ -90,7 +90,7 @@ function replaceBattleSprites() {
             if (window.FAKEMON_SPRITES[speciesId]) {
                 const front = window.FAKEMON_SPRITES[speciesId].front;
 
-                picon.style.background = 'transparent url(${front}) no-repeat center center';
+                picon.style.background = \`transparent url(${front}) no-repeat center center\`;
                 picon.style.backgroundSize = 'contain';
             }
         });
