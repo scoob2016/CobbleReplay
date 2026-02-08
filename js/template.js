@@ -54,28 +54,32 @@ window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 <script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>
 <script>
 (function () {
-  if (!window.Dex || !Dex.getSpriteData) return;
+  function tryPatch() {
+    if (!window.Dex || !Dex.getSpriteData) return false;
 
-  const originalGetSpriteData = Dex.getSpriteData;
+    const originalGetSpriteData = Dex.getSpriteData;
 
-  Dex.getSpriteData = function (species, side, options) {
-    const id = Dex.toID(species);
+    Dex.getSpriteData = function (species, side, options) {
+      const id = Dex.toID(species);
 
-    if (window.FAKEMON_SPRITES[id]) {
-      const sprite = window.FAKEMON_SPRITES[id];
-      const isBack = side === 'back';
+      if (window.FAKEMON_SPRITES && window.FAKEMON_SPRITES[id]) {
+        const sprite = window.FAKEMON_SPRITES[id];
+        return {
+          url: side === 'back' ? sprite.back : sprite.front,
+          w: 96,
+          h: 96,
+          y: 0
+        };
+      }
 
-      return {
-        url: isBack ? sprite.back : sprite.front,
-        w: 96,
-        h: 96,
-        y: 0,
-        isCustom: true
-      };
-    }
+      return originalGetSpriteData.call(this, species, side, options);
+    };
 
-    return originalGetSpriteData.call(this, species, side, options);
-  };
+    return true;
+  }
+  const interval = setInterval(() => {
+    if (tryPatch()) clearInterval(interval);
+  }, 10);
 })();
 </script>
 </head>
