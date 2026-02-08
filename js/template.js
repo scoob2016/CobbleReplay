@@ -51,7 +51,7 @@ body{padding:12px 0;}
 <script>
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 </script>
-<script src="replayembed.js"></script>
+<script src="js/replayembed.js"></script>
 </head>
 <body>
 <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
