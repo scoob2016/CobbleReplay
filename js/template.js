@@ -83,19 +83,10 @@ function replaceBattleSprites() {
     document.querySelectorAll('.battle .innerbattle .leftbar .teamicons .picon, .battle .innerbattle .rightbar .teamicons .picon')
         .forEach(picon => {
             const aria = picon.getAttribute('aria-label') || '';
-            let speciesId;
+            const speciesId = Object.keys(window.FAKEMON_SPRITES)
+                .find(species => aria.includes(species));
 
-            const matches = aria.match(/\(([^)]+)\)/g);
-            if (matches && matches.length >= 2) {
-                speciesId = matches[matches.length - 2].slice(1, -1).toLowerCase();
-            } else if (matches && matches.length === 1) {
-                speciesId = matches[0].slice(1, -1).toLowerCase();
-            } else {
-                speciesId = aria.toLowerCase();
-            }
-            console.log(speciesId)
-
-            if (window.FAKEMON_SPRITES[speciesId]) {
+            if (speciesId) {
                 const front = window.FAKEMON_SPRITES[speciesId].front;
 
                 picon.style.background = \`transparent url(\${front}) no-repeat center center\`;
