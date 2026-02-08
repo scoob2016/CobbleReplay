@@ -59,8 +59,8 @@ function updatePokemonText(img, speciesId) {
     const battleDiv = img.closest('.battle .innerbattle');
     if (!battleDiv) return;
 
-    const leftStat = battleDiv.querySelector('.lstatbar .leftstatbar strong');
-    const rightStat = battleDiv.querySelector('.rstatbar .leftstatbar strong');
+    const leftStat = battleDiv.querySelectorAll('.lstatbar .leftstatbar strong');
+    const rightStat = battleDiv.querySelectorAll('.rstatbar .leftstatbar strong');
 
     [leftStat, rightStat].forEach(el => {
         if (el && el.textContent.toLowerCase() === speciesId.toLowerCase()) {
