@@ -52,36 +52,33 @@ body{padding:12px 0;}
 <script>
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
 
-(function patchSprites() {
-    const interval = setInterval(() => {
-        if (window.Dex && Dex.getSpriteData) {
-            const origDex = Dex.getSpriteData;
-            Dex.getSpriteData = function(species, side, options) {
-                const id = toID(species);
-                if (window.FAKEMON_SPRITES?.[id]) {
-                    const s = window.FAKEMON_SPRITES[id];
-                    return {url: side === 'back' ? s.back : s.front, w: 80, h: 80, y:0};
-                }
-                return origDex.call(this, species, side, options);
-            };
-        }
+function replaceBattleSprites() {
+    document.querySelectorAll('.battle img').forEach(img => {
+        const src = img.src;
+        if (!src) return;
 
-        if (window.Replay && Replay.prototype.getSpriteUrl) {
-            const origReplay = Replay.prototype.getSpriteUrl;
-            Replay.prototype.getSpriteUrl = function(pokemon, isBack) {
-                const id = toID(pokemon.species || pokemon);
-                if (window.FAKEMON_SPRITES?.[id]) {
-                    const s = window.FAKEMON_SPRITES[id];
-                    return isBack ? s.back : s.front;
-                }
-                return origReplay.call(this, pokemon, isBack);
-            };
-        }
+        const match = src.match(/\/sprites\/ani(-back)?\/([a-z0-9-]+)\.gif$/);
+        if (!match) return;
 
-        if (window.Dex && Dex.getSpriteData && window.Replay && Replay.prototype.getSpriteUrl) {
-            clearInterval(interval);
+        const isBack = !!match[1];
+        const speciesId = match[2];
+
+        if (window.FAKEMON_SPRITES?.[speciesId]) {
+            img.src = isBack
+                ? window.FAKEMON_SPRITES[speciesId].back
+                : window.FAKEMON_SPRITES[speciesId].front;
         }
-    }, 50);
+    });
+}
+
+const battleDiv = document.querySelector('.battle');
+if (battleDiv) {
+    const observer = new MutationObserver(replaceBattleSprites);
+    observer.observe(battleDiv, { childList: true, subtree: true });
+}
+
+setTimeout(replaceBattleSprites, 50);
+</script>
 })();
 </script>
 </head>
