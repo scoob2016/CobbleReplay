@@ -60,7 +60,7 @@ window.FAKEMON_SPRITES = __FAKEMON_JSON__;
     const originalGetSpriteData = Dex.getSpriteData;
 
     Dex.getSpriteData = function (species, side, options) {
-      const id = Dex.toID(species);
+      const id = toID(species);
 
       if (window.FAKEMON_SPRITES && window.FAKEMON_SPRITES[id]) {
         const sprite = window.FAKEMON_SPRITES[id];
