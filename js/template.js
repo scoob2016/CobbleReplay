@@ -85,10 +85,11 @@ function replaceBattleSprites() {
             const aria = picon.getAttribute('aria-label') || '';
             let speciesId;
 
-            const match = aria.match(/\(([^)]+)\)/);
-            console.log(match)
-            if (match) {
-                speciesId = match[1].toLowerCase();
+            const matches = aria.match(/\(([^)]+)\)/g);
+
+            if (matches && matches.length) {
+                const speciesGroup = matches[matches.length - 2];
+                speciesId = speciesGroup.slice(1, -1).toLowerCase();
             } else {
                 speciesId = aria.toLowerCase();
             }
