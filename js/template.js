@@ -50,28 +50,8 @@ body{padding:12px 0;}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
 window.FAKEMON_SPRITES = __FAKEMON_JSON__;
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register(
-    URL.createObjectURL(new Blob([`
-      self.addEventListener('fetch', event => {
-        const url = new URL(event.request.url);
-
-        if (url.pathname.startsWith('/sprites/') && url.pathname.endsWith('.png')) {
-          const name = url.pathname.split('/').pop().replace('.png','').toLowerCase();
-          const fakemon = self.FAKEMON_SPRITES && self.FAKEMON_SPRITES[name];
-          if (fakemon) {
-            event.respondWith(fetch(fakemon.front));
-            return;
-          }
-        }
-        event.respondWith(fetch(event.request));
-      });
-    `], { type: 'text/javascript' }))
-  );
-}
 </script>
-<script src="https://play.pokemonshowdown.com/js/replay-embed.js"></script>
+<script src="replayembed.js"></script>
 </head>
 <body>
 <div class="wrapper replay-wrapper" style="max-width:1180px;margin:0 auto">
