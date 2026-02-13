@@ -72,14 +72,14 @@ async function toggleStar() {
 
     if (starred) {
         await removeReplay(id);
-        button.textContent = "☆ Star";
+        button.textContent = "☆ Favourite";
         button.classList.remove("starred");
     } else {
         const data = decodeCurrentReplay();
         const players = extractPlayersFromLog(data.r);
 
         await saveReplay(id, id, players);
-        button.textContent = "★ Starred";
+        button.textContent = "★ Favourited";
         button.classList.add("starred");
     }
 
