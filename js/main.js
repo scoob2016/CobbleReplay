@@ -126,14 +126,17 @@ function setReplay(log, fakemonSprites) {
     container.innerHTML = '<iframe src="' + url + '" style="width:100%;height:600px;" referrerpolicy="no-referrer" allowfullscreen></iframe>';
 }
 
+function getReplayIdFromHash() {
+    const raw = window.location.hash.slice(1);
+    if (!raw.startsWith("cr1:")) return null;
+    return raw.slice(4); // Use payload as ID
+}
+
 function initialize() {
     const container = document.querySelector(".iframe-result-container");
     container.innerHTML = '';
 
-    const raw = window.location.hash.slice(1);
-    if (!raw.startsWith("cr1:")) return;
-
-    const payload = raw.slice(4);
+    const payload = getReplayIdFromHash();
 
     try {
 
@@ -150,6 +153,7 @@ function initialize() {
         setTheme(data.t)
         setReplay(data.r, data.f)
         updateStarButton();
+        document.getElementById("starReplayButton").addEventListener("click", toggleStar);
     } catch (e) {
         console.error("Failed to load log from URL.", e);
         alert("Invalid log URL. Please contact support!");
@@ -162,4 +166,3 @@ else document.addEventListener("DOMContentLoaded", initialize);
 window.addEventListener("hashchange", () => {
     initialize();
 });
-document.getElementById("starReplayButton").addEventListener("click", toggleStar);
