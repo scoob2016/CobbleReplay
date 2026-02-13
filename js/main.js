@@ -76,3 +76,7 @@ function initialize() {
 
 if (document.readyState !== "loading") initialize();
 else document.addEventListener("DOMContentLoaded", initialize);
+
+window.addEventListener("hashchange", () => {
+    initialize();
+});
