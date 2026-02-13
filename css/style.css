@@ -72,3 +72,14 @@ p {
     z-index: 1000;
     box-sizing: border-box;
 }
+
+#starReplayButton {
+    font-size: 1.2em;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #f5c518;
+}
+#starReplayButton.starred {
+    color: #ffb300;
+}

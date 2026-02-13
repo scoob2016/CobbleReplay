@@ -1,5 +1,83 @@
 "use strict";
 
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("CobbleReplayDB", 1);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            const store = db.createObjectStore("replays", { keyPath: "id" });
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function saveReplay(id, payload) {
+    const db = await openDB();
+    const tx = db.transaction("replays", "readwrite");
+    const store = tx.objectStore("replays");
+    await store.put({ id, payload });
+    await tx.complete;
+}
+
+async function removeReplay(id) {
+    const db = await openDB();
+    const tx = db.transaction("replays", "readwrite");
+    const store = tx.objectStore("replays");
+    await store.delete(id);
+    await tx.complete;
+}
+
+async function isReplayStarred(id) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("replays", "readonly");
+        const store = tx.objectStore("replays");
+        const request = store.get(id);
+        request.onsuccess = () => resolve(!!request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function toggleStar() {
+    const button = document.getElementById("starReplayButton");
+    const id = getReplayIdFromHash();
+    if (!id) return;
+
+    const starred = await isReplayStarred(id);
+    if (starred) {
+        await removeReplay(id);
+        button.textContent = "☆ Star";
+        button.classList.remove("starred");
+    } else {
+        await saveReplay(id, id);
+        button.textContent = "★ Starred";
+        button.classList.add("starred");
+    }
+}
+
+async function updateStarButton() {
+    const button = document.getElementById("starReplayButton");
+    const id = getReplayIdFromHash();
+    if (!id) {
+        button.style.display = "none"; // no replay loaded
+        return;
+    }
+
+    button.style.display = "inline-block";
+
+    const starred = await isReplayStarred(id);
+    if (starred) {
+        button.textContent = "★ Starred";
+        button.classList.add("starred");
+    } else {
+        button.textContent = "☆ Star";
+        button.classList.remove("starred");
+    }
+}
+
 function generateHTML(log, fakemonSprites) {
     return window.TemplateHTML.replace("__BATTLE_LOG__", log)
     .replace(
@@ -49,6 +127,9 @@ function setReplay(log, fakemonSprites) {
 }
 
 function initialize() {
+    const container = document.querySelector(".iframe-result-container");
+    container.innerHTML = '';
+
     const raw = window.location.hash.slice(1);
     if (!raw.startsWith("cr1:")) return;
 
@@ -68,6 +149,7 @@ function initialize() {
         const data = JSON.parse(json);
         setTheme(data.t)
         setReplay(data.r, data.f)
+        updateStarButton();
     } catch (e) {
         console.error("Failed to load log from URL.", e);
         alert("Invalid log URL. Please contact support!");
@@ -80,3 +162,4 @@ else document.addEventListener("DOMContentLoaded", initialize);
 window.addEventListener("hashchange", () => {
     initialize();
 });
+document.getElementById("starReplayButton").addEventListener("click", toggleStar);
