@@ -130,18 +130,22 @@ async function refreshSavedReplaysDropdown() {
         '<option value="" disabled selected hidden>★ View Favourites</option>';
 
     const db = await openDB();
-    const tx = db.transaction("replays", "readonly");
-    const store = tx.objectStore("replays");
 
-    const request = store.getAll();
-    request.onsuccess = () => {
-        request.result.forEach(r => {
-            const opt = document.createElement("option");
-            opt.value = "#cr1:" + r.payload;
-            opt.textContent = `${r.players.p1} vs ${r.players.p2}`;
-            dropdown.appendChild(opt);
-        });
-    };
+    const replays = await new Promise((resolve, reject) => {
+        const tx = db.transaction("replays", "readonly");
+        const store = tx.objectStore("replays");
+        const req = store.getAll();
+
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+
+    for (const r of replays) {
+        const opt = document.createElement("option");
+        opt.value = "#cr1:" + r.payload;
+        opt.textContent = `${r.players.p1} vs ${r.players.p2}`;
+        dropdown.appendChild(opt);
+    }
 }
 
 function generateHTML(log, fakemonSprites) {
