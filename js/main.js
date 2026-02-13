@@ -90,7 +90,7 @@ async function updateStarButton() {
     const button = document.getElementById("starReplayButton");
     const id = getReplayIdFromHash();
     if (!id) {
-        button.style.display = "none"; // no replay loaded
+        button.style.display = "none";
         return;
     }
 
@@ -125,7 +125,9 @@ function extractPlayersFromLog(log) {
 
 async function refreshSavedReplaysDropdown() {
     const dropdown = document.getElementById("savedReplaysDropdown");
-    dropdown.innerHTML = '<option value="">★ Saved Replays</option>';
+
+    dropdown.innerHTML =
+        '<option value="" disabled selected hidden>★ View Favourites</option>';
 
     const db = await openDB();
     const tx = db.transaction("replays", "readonly");
@@ -193,7 +195,20 @@ function setReplay(log, fakemonSprites) {
 function getReplayIdFromHash() {
     const raw = window.location.hash.slice(1);
     if (!raw.startsWith("cr1:")) return null;
-    return raw.slice(4); // Use payload as ID
+    return raw.slice(4);
+}
+
+function attachUIListeners() {
+    document.getElementById("starReplayButton")
+        .addEventListener("click", toggleStar);
+
+    document.getElementById("savedReplaysDropdown")
+        .addEventListener("change", (e) => {
+            if (e.target.value) {
+                window.location.hash = e.target.value;
+                e.target.value = "";
+            }
+        });
 }
 
 function initialize() {
@@ -217,22 +232,20 @@ function initialize() {
         setTheme(data.t)
         setReplay(data.r, data.f)
         updateStarButton();
-        document.getElementById("starReplayButton").addEventListener("click", toggleStar);
-        document.getElementById("savedReplaysDropdown")
-            .addEventListener("change", (e) => {
-                if (e.target.value) {
-                    window.location.hash = e.target.value;
-                    e.target.value = "";
-                }
-            });
     } catch (e) {
         console.error("Failed to load log from URL.", e);
         alert("Invalid log URL. Please contact support!");
     }
 }
 
-if (document.readyState !== "loading") initialize();
-else document.addEventListener("DOMContentLoaded", initialize);
+function onReady() {
+    attachUIListeners();
+    refreshSavedReplaysDropdown();
+    initialize();
+}
+
+if (document.readyState !== "loading") onReady();
+else document.addEventListener("DOMContentLoaded", onReady);
 
 window.addEventListener("hashchange", () => {
     initialize();
